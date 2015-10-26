@@ -5,11 +5,11 @@ from common import Direction
 class GameModel (EventDispatcher):
     def __init__(self):
         super().__init__()
-        self.location = {'x': 0, 'y': 0}
+        self.location = {'x': 500, 'y': 500}
         #uses common.Direction as flags
         self.direction = 0
         #pixels per second
-        self.speed = 500
+        self.speed = 50
         self.register_event_type("on_move")
         self.register_event_type("on_model_update")
 
@@ -17,6 +17,11 @@ class GameModel (EventDispatcher):
         self.direction = direction
         
     def update(self, dt):
+        '''
+        This method updates the model's state whenever the game engine makes it through a cycle.
+        :param dt: The amount of time in seconds since the update method was last called.
+        :type dt: float
+        '''
         if self.direction == 0:
             return
         #should dispatch an event to observers when the model is updated

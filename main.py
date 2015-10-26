@@ -6,17 +6,17 @@ from GameController import GameController
 from cocos.scene import Scene
 
 '''
-This is the main class to the game. It starts the director listening for events, then starts the main menu scene
+This is the main game code. It starts the first scene.
 '''
 
 def get_new_game():
     scene = Scene()
-    scene.enable_handlers(True)
     model = GameModel()
     view = GameView(model)
     controller = GameController(model)
     scene.add(controller, z=1, name="controller")
     scene.add(view, name="view")
+    scene.enable_handlers(True)    
     return scene
 
 director.init(width=1920, height=1080, caption="hello World", fullscreen=True)

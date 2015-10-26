@@ -1,4 +1,6 @@
-from enum import Enum
+'''
+A class to hold common code and variables
+'''
 
 class Direction:
     def __init__(self):
