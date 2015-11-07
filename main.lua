@@ -1,117 +1,61 @@
-debug = true
+-- main.lua
+-- entry point for the Love2d game engine
+require "src.tiledmap"
+require "src.aeroplane"
 
-canShoot = true
-canShootTimerMax = 0.2
-canShootTimer = canShootTimerMax
+keyPressed = {}
 
---image for the projectile
-bulletImg = nil
+activeEntities = {}
 
---entities
-bullets = {}
+playerEntity = nil
 
-direction = {
-   left = 1,
-   down = 2,
-   right = 4,
-   up = 8,
-}
 
-model = {
-   player = {
-      x = 200,
-      y = 100,
-      dx = 0,
-      dy = 0,
-      speed = 150,
-      img = nil,
-   }
-}
-function model:movePlayer(vector)
-   if vector == direction.left then
-      self.player.dx = -self.player.speed
-   end
-   if vector == direction.right then
-      self.player.dx = self.player.speed
-   end
-   if vector == direction.up then
-      self.player.dy = -self.player.speed
-   end
-   if vector == direction.down then
-      self.player.dy = self.player.speed
-   end
+-- this needs to be in conf.lua
+-- function love.conf(t)
+-- end
 
-end
+function love.load()
+   --love system settings (window settings, etc)
    
-function model:shoot(source)
-   local newBullet = {
-      x = self.player.x + (self.player.img:getWidth()/2),
-      y = self.player.y,
-      img = bulletImg
-   }
-   table.insert(bullets, newBullet)
-   canShoot = false
-   canShootTimer = canShootTimerMax
-end
+   --load all assets
 
-Controller = {}
-function Controller:handleKeypress()
-   if love.keyboard.isDown('escape') then
-      love.event.push('quit')
-   end
-
-   if love.keyboard.isDown('left','a') then
-      model:movePlayer(direction.left)
-   end
-   if love.keyboard.isDown('right','d') then
-      model:movePlayer(direction.right)
-   end
-   if love.keyboard.isDown('up', 'w') then
-      model:movePlayer(direction.up)
-   end
-   if love.keyboard.isDown('down', 's') then
-      model:movePlayer(direction.down)
-   end
-   if love.keyboard.isDown(' ', 'rctrl', 'lctrl', 'ctrl') and canShoot then
-      model:shoot(model.player)
-   end
+   --TiledMap code needs to be moved to its own entity
+   -- TiledMap_Load("assets/hyrule-world.tmx")
+   -- gCamX,gCamY = gMapWidth * gTileWidth / 2, gMapHeight * gTileHeight / 2
+   aeroplane.init()
+   playerEntity = aeroplane
+   table.insert(activeEntities, playerEntity)
    
 end
 
-function Controller:run()
-   self.handleKeypress()
-end
-
-
-function love.load(arg)
-   bulletImg = love.graphics.newImage('assets/bullet.png')
-   model.player.img = love.graphics.newImage('assets/plane.png')
-   
-end
-
+--update the game model
 function love.update(dt)
-   Controller:run()
-   canShootTimer = canShootTimer - 1 * dt
-   if canShootTimer < 0 then
-      canShoot = true
-   end
-   model.player.x = model.player.x + model.player.dx * dt
-   model.player.dx = 0
-   model.player.y = model.player.y + model.player.dy * dt
-   model.player.dy = 0
-   for i, bullet in ipairs(bullets) do
-      bullet.y = bullet.y - 250 * dt
-      if bullet.y < 0 then
-         table.remove(bullets, i)
-      end
+   for key, value in pairs(activeEntities) do
+      value:updateModel(dt)
    end
    
 end
-   
-function love.draw(dt)
-   love.graphics.draw(model.player.img, model.player.x, model.player.y)
-   for i, bullet in ipairs(bullets) do
-      love.graphics.draw(bullet.img, bullet.x, bullet.y)
+
+--update the view based on changes from the model
+function love.draw()
+   -- should limit to visible entities. ya should be done here since we know where the window is.
+   for key, value in pairs(activeEntities) do
+      value:draw()
    end
    
+end
+
+function love.keypressed(key, isrepeat)
+   keyPressed[key] = true
+   if key == "escape" then
+      os.exit(0)
+   end
+
+   -- should this be a loop? is there a better way of sending commands out to the eititiy(s) that the player controls?
+   playerEntity:handleKeypress(key, isrepeat)
+
+end
+
+function love.keyreleased(key)
+   keyPressed[key] = false
 end
