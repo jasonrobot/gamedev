@@ -1,14 +1,16 @@
 -- main.lua
 -- entry point for the Love2d game engine
-require "src.tiledmap"
+-- require "src.tiledmap"
 require "src.aeroplane"
+require "src.map"
 
 keyPressed = {}
 
+--- entities who wish to be notified when a key is pressed
+keyPressedHandlers = {}
+
+--- entities whose models should be updated every game tick
 activeEntities = {}
-
-playerEntity = nil
-
 
 -- this needs to be in conf.lua
 -- function love.conf(t)
@@ -22,16 +24,20 @@ function love.load()
    --TiledMap code needs to be moved to its own entity
    -- TiledMap_Load("assets/hyrule-world.tmx")
    -- gCamX,gCamY = gMapWidth * gTileWidth / 2, gMapHeight * gTileHeight / 2
-   aeroplane.init()
-   playerEntity = aeroplane
-   table.insert(activeEntities, playerEntity)
+   aeroplane.load()
+   map.load()
+   map.setTarget(aeroplane)
+   
+   table.insert(activeEntities, aeroplane)
+   table.insert(keyPressedHandlers, aeroplane)
+   
    
 end
 
 --update the game model
 function love.update(dt)
    for key, value in pairs(activeEntities) do
-      value:updateModel(dt)
+      value:update(dt)
    end
    
 end
@@ -52,8 +58,10 @@ function love.keypressed(key, isrepeat)
    end
 
    -- should this be a loop? is there a better way of sending commands out to the eititiy(s) that the player controls?
-   playerEntity:handleKeypress(key, isrepeat)
-
+   for key, value in pairs(keyPressedHandlers) do
+      value:keypressed(key, isrepeat)
+   end
+   
 end
 
 function love.keyreleased(key)

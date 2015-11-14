@@ -7,8 +7,10 @@ setfenv(1, P)
 local model = {
    x = 200,
    y = 100,
+   maxd = 200,
    dx = 0,
    dy = 0,
+   maxdd = 500,
    ddx = 0,
    ddy = 0,
    speed = 150,
@@ -36,18 +38,19 @@ local control = {
 }
 
 --- load all the entity's resources
-function init()
+function load()
    image = love.graphics.newImage(imageSource)
 end
 
 --- updates the model based on inputs processed from the controller that are stores in the control object
-function updateModel(dt)
+function update(dt)
    
 end
 
 --- updates the controller table based on commands from an intelligence source
-function handleKeypress(key, isrepeat)
-
+function keypressed(key, isrepeat)
+   print("Key pressed: ")
+   print(key)
 end
 
 --- make pretty in graphics buffer (model willing)
