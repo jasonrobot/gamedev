@@ -4,17 +4,16 @@ aeroplane = P
 setfenv(1, P)
 
 --- model object represents the current state of the entity
-model = {
-   x = 200,
-   y = 100,
-   maxd = 200,
-   dx = 0,
-   dy = 0,
-   maxdd = 500,
-   ddx = 0,
-   ddy = 0,
-   speed = 150,
-}
+x = 200
+y = 100
+local maxd = 200
+local dx = 0
+local dy = 0
+local maxdd = 500
+local ddx = 0
+local ddy = 0
+local speed = 150
+
 
 imageSource = "assets/megaman.png"
 image = nil
@@ -44,18 +43,18 @@ end
 
 --- updates the model based on inputs processed from the controller that are stores in the control object
 function update(dt)
-   model.dx = model.dx + model.ddx * dt
-   model.dy = model.dy + model.ddy * dt
-   model.x = model.x + model.dx * dt
-   model.y = model.y + model.dy * dt
+   dx = dx + ddx * dt
+   dy = dy + ddy * dt
+   x = x + dx * dt
+   y = y + dy * dt
 end
 
 keyPressedActions = {}
 keyPressedActions.up = function()
-   model.ddy = -model.speed
+   ddy = -speed
 end
 keyPressedActions.down = function()
-   model.ddy = model.speed
+   ddy = speed
 end
 
 --- updates the controller table based on commands from an intelligence source
@@ -65,7 +64,7 @@ end
 
 keyReleasedActions = {}
 keyReleasedActions.up = function()
-   model.ddy = 0
+   ddy = 0
 end
 keyReleasedActions.down = keyReleasedActions.up
 
@@ -75,6 +74,6 @@ end
 
 --- make pretty in graphics buffer (model willing)
 function draw()
-   love.graphics.draw(image, model.x, model.y)
-   print(model.ddy)
+   love.graphics.draw(image, x, y)
+--   print(ddy)
 end

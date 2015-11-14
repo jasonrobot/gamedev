@@ -27,6 +27,7 @@ function love.load()
    map.setTarget(aeroplane)
    
    table.insert(activeEntities, aeroplane)
+   table.insert(activeEntities, map)
    table.insert(keyPressedHandlers, aeroplane)
    
    
