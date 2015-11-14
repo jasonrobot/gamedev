@@ -28,8 +28,8 @@ end
 ---- view ----
 
 function draw()
-   map:setDrawRange(camX, camY, windowWidth, windowHeight)
-   map:draw()
+--   map:setDrawRange(camX, camY, windowWidth, windowHeight)
+--   map:draw()
 end
 
 function act()
