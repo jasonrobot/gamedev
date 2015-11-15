@@ -1,6 +1,5 @@
 -- main.lua
 -- entry point for the Love2d game engine
--- require "src.tiledmap"
 require "src.aeroplane"
 require "src.map"
 
@@ -10,62 +9,53 @@ keyPressedHandlers = {}
 --- entities whose models should be updated every game tick
 activeEntities = {}
 
--- this needs to be in conf.lua
--- function love.conf(t)
--- end
+maps = {}
+activeMap = nil
 
 function love.load()
    --love system settings (window settings, etc)
    
    --load all assets
 
-   --TiledMap code needs to be moved to its own entity
-   -- TiledMap_Load("assets/hyrule-world.tmx")
-   -- gCamX,gCamY = gMapWidth * gTileWidth / 2, gMapHeight * gTileHeight / 2
-   aeroplane.load()
-   map.load()
-   map.setTarget(aeroplane)
-   
-   table.insert(activeEntities, aeroplane)
-   table.insert(activeEntities, map)
-   table.insert(keyPressedHandlers, aeroplane)
-   
-   
+   -- the active map will replace the active entities table
+   -- all callbacks will get passed to the active map
+   -- somewhat like the concept of scenes, the active map manages EVERYTHING WITH ACTIVE ENTITIES
+   maps.world = map
+   maps.world.load()
+
+   maps.world.addTarget(aeroplane)
+
+   activeMap = maps.world
+
 end
 
 --update the game model
 function love.update(dt)
-   for k, value in pairs(activeEntities) do
-      value.update(dt)
-   end
+   activeMap.update(dt)
    
 end
 
 --update the view based on changes from the model
 function love.draw()
    -- should limit to visible entities. ya should be done here since we know where the window is.
-   for k, value in pairs(activeEntities) do
-      value.draw()
-   end
+   activeMap.draw()
    
 end
 
 function love.keypressed(key, isrepeat)
+   -- Global handlers
    if key == "escape" then
       os.exit(0)
    end
 
-   -- should this be a loop? is there a better way of sending commands out to the eititiy(s) that the player controls?
-   print(key)
-   for k, value in pairs(keyPressedHandlers) do
-      print(key)
-      value.keypressed(key, isrepeat)
-   end
-   
+   -- Game handlers
+   activeMap.keypressed(key, isrepeat)
 end
 
 function love.keyreleased(key)
-   for k, value in pairs(keyPressedHandlers) do
-      value.keyreleased(key)
-   end
+   -- Global handlers
+   
+   -- Game handlers
+   activeMap.keyreleased(key)
+   
 end
