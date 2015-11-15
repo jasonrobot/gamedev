@@ -6,12 +6,14 @@ setfenv(1, P)
 local sti = require "lib.Simple-Tiled-Implementation"
 
 local map = nil
-local camX = 100
-local camY = 100
+local camX = 400
+local camY = 400
 local target = nil
 
-
+-- explicit key shared between the tables. Starts at one because lua is fucking retarded.
+local entKey = 1
 local entities = {}
+local layers = {}
 
 ---- model ----
 --- Load the map and initializa all the things in the world
@@ -28,25 +30,37 @@ end
 function update(dt)
    -- TODO handle nil
    camX = target.x
-   camy = target.y
+   camY = target.y
    for k, e in pairs(entities) do
       e.update(dt)
    end
-      
+   
 end
 
 ---- view ----
 
 function draw()
-  map:setDrawRange(camX, camY, windowWidth, windowHeight)
-  map:draw()
+   -- update the object layers in the map based on their entities' models
+   for key, ent in pairs(entities) do
+      for _, sprite in pairs(layers[key].sprites) do
+         sprite.x = ent.x
+         sprite.y = ent.y
+      end
+   end
 
-  -- draw the entities
-  -- FIXME we need to tell entities where to be drawn, because we know the viewport
-  for k, e in pairs(entities) do
-     e.draw()
-  end
+   print(camX, camY)
+   map:setDrawRange(camX, camY, windowWidth, windowHeight)
+   map:draw()
+
+   -- draw the entities
+   -- FIXME we need to tell entities where to be drawn, because we know the viewport
+   -- for k, e in pairs(entities) do
+   --    e.draw()
+   -- end
+   -- No, what we should do is add an object layer to the map for every entity we have, then update the object's
+   -- coordinates here before just drawing the map
   
+    
 end
 
 function act()
@@ -67,7 +81,27 @@ end
 
 function addEntity(entity)
    entity.load()
-   table.insert(entities, entity)
+   entities[entKey] = entity
+   map:addCustomLayer("Player", 99)
+   local newLayer = map.layers["Player"]
+   newLayer.sprites = {
+      player = {
+         image = entity.image,
+         x = entity.x,
+         y = entity.y,
+         r = 0
+      }
+   }
+   function newLayer:draw()
+      for _, sprite in pairs(self.sprites) do
+         love.graphics.draw(sprite.image, x, y, r)
+      end
+   end
+
+   layers[entKey] = newLayer
+   
+   -- incr shared key
+   entKey = entKey + 1
 end
 
 --- Add a new entity and set it as the target. The target recieves keypress callbacks.

@@ -1,6 +1,6 @@
 local P = {}
 setmetatable(P, {__index = _G})
-aeroplane = P
+player = P
 setfenv(1, P)
 
 --- model object represents the current state of the entity

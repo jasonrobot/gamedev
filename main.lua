@@ -1,6 +1,6 @@
 -- main.lua
 -- entry point for the Love2d game engine
-require "src.aeroplane"
+require "src.player"
 require "src.map"
 
 --- entities who wish to be notified when a key is pressed
@@ -23,7 +23,7 @@ function love.load()
    maps.world = map
    maps.world.load()
 
-   maps.world.addTarget(aeroplane)
+   maps.world.addTarget(player)
 
    activeMap = maps.world
 
