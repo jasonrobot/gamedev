@@ -1,25 +1,0 @@
-
-aeroplane.lua,129
-function load(41,894
-function update(46,1068
-function keypressed(62,1483
-function keyreleased(72,1680
-function draw(77,1791
-
-map.lua,173
-function load(17,177
-function update(23,310
-function draw(30,413
-function act(34,482
-function keypressed(40,604
-function keyreleased(43,644
-function setTarget(46,675
-
-tiledmap.lua,240
-function TiledMap_Load 11,447
-function TiledMap_GetMapTile 34,1181
-function TiledMap_DrawNearCam 39,1332
-function LoadXML(64,2105
-local function getTilesets(115,3544
-local function getLayers(125,3750
-function TiledMap_Parse(160,4500
