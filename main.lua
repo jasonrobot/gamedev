@@ -1,61 +1,64 @@
 -- main.lua
 -- entry point for the Love2d game engine
-require "src.player"
-require "src.map"
-
---- entities who wish to be notified when a key is pressed
-keyPressedHandlers = {}
-
---- entities whose models should be updated every game tick
-activeEntities = {}
-
-maps = {}
-activeMap = nil
+local sti = require "sti"
 
 function love.load()
-   --love system settings (window settings, etc)
-   
-   --load all assets
+   love.window.setMode(640, 640)   
 
-   -- the active map will replace the active entities table
-   -- all callbacks will get passed to the active map
-   -- somewhat like the concept of scenes, the active map manages EVERYTHING WITH ACTIVE ENTITIES
-   maps.world = map
-   maps.world.load()
+   map = sti.new("tiled-02.lua")
 
-   maps.world.addTarget(player)
+   -- create a new dynamic layer for sprites as layer 5
+   local layer = map:addCustomLayer("Sprites", 3)
 
-   activeMap = maps.world
-
-end
-
---update the game model
-function love.update(dt)
-   activeMap.update(dt)
-   
-end
-
---update the view based on changes from the model
-function love.draw()
-   -- should limit to visible entities. ya should be done here since we know where the window is.
-   activeMap.draw()
-   
-end
-
-function love.keypressed(key, isrepeat)
-   -- Global handlers
-   if key == "escape" then
-      os.exit(0)
+   -- he says: get the player spawn object
+   --  I'm guessing that the object in the map is just what we're using as a refrence to
+   --  place our fully dynamic entity on
+   local playerObject
+   for i, object in ipairs(map.objects) do
+      if object.name == "player" then
+	 playerObject = object
+	 break
+      end
    end
 
-   -- Game handlers
-   activeMap.keypressed(key, isrepeat)
+   --create the player object
+   local sprite = love.graphics.newImage("megaman.png")
+   layer.player = {
+      sprite = sprite,
+      x = playerObject.x,
+      y = playerObject.y,
+      ox = sprite:getWidth() / 2,
+      oy = sprite:getHeight() / 1.35,
+   }
+
+   --   layer.draw = function(self)
+   function layer:draw()
+      love.graphics.draw(
+	 self.player.sprite,
+	 math.floor(self.player.x),
+	 math.floor(self.player.y),
+	 0,
+	 1,
+	 1,
+	 self.player.ox,
+	 self.player.oy
+      )
+
+      --draw a point at the location, just to use as a refrence or something
+      --to make sure our draw method isnt fucked
+      love.graphics.setPointSize(5)
+      love.graphics.points(math.floor(self.player.x), math.floor(self.player.y))
+   end
+
+   map:removeLayer("player")
 end
 
-function love.keyreleased(key)
-   -- Global handlers
+function love.update(dt)
+   map:update(dt)
    
-   -- Game handlers
-   activeMap.keyreleased(key)
+end
+
+function love.draw()
+   map:draw()
    
 end
