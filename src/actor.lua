@@ -1,10 +1,10 @@
 ---- Actor.lua
 --- This object represents either a player, npc, or object that can be involved in the script
 
-local P = {}
-setmetatable(P, {__index = _G})
-setfenv(1, P)
-
+local Actor = {}
+Actor.__index = Actor
+setmetatable(Actor, {__index = _G})
+setfenv(1, Actor)
 
 -- Constructor
 local function new (x, y)
@@ -19,13 +19,20 @@ local function new (x, y)
    
    t.pos.x = x
    t.pos.y = y
-   return t
+   return setmetatable(t, Actor)
+
+end
+
+function Actor:moveBy (x, y)
+   self.pos.x = self.pos.x + x
+   self.pos.y = self.pos.y + y
+
 end
 
 return setmetatable(
-   {new = new},
+   {new = new, moveBy = moveBy},
    {__call = function(_, ...)
        return new(...)
-   end
+   end,
    }
 )

@@ -17,7 +17,7 @@ function love.load ()
 end
 
 function love.update (dt)
-   actor.pos.x = actor.pos.x + 1
+   actor:moveBy(1, 0)
 --   print(cam.x, cam.y)
    local dx, dy = actor.pos.x - cam.x, actor.pos.y - cam.y
 
