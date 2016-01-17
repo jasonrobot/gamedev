@@ -2,28 +2,27 @@
 -- entry point for the Love2d game engine
 local Camera = require "lib.hump.camera"
 local window = {}
+local Actor = require "src.actor"
 
-player = {}
-player.pos = {}
-player.pos.x = 200
-player.pos.y = 200
+function love.load ()
+   actor = Actor:new(200, 200)
+   anotherActor = Actor:new(800, 200)
 
-function love.load()
-   cam = Camera(player.pos.x, player.pos.y)
+   cam = Camera(actor.pos.x, actor.pos.y)
    map = love.graphics.newImage("assets/blue.png")
-   
+
 end
 
-function love.update(dt)
-   player.pos.x = player.pos.x + 1
---   print(cam.x, cam.y)
-   local dx, dy = player.pos.x - cam.x, player.pos.y - cam.y
-   print(dx, dy)
+function love.update (dt)
+   actor.pos.x = actor.pos.x + 1
+   print(cam.x, cam.y)
+   local dx, dy = actor.pos.x - cam.x, actor.pos.y - cam.y
+
    cam:move(dx/2, dy/2)
    
 end
 
-function love.draw()
+function love.draw ()
    --begin camera
    cam:attach()
    
