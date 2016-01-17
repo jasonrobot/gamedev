@@ -5,8 +5,11 @@ local window = {}
 local Actor = require "src.actor"
 
 function love.load ()
-   actor = Actor:new(200, 200)
-   anotherActor = Actor:new(800, 200)
+   -- actor = Actor.new(200, 200)
+   -- anotherActor = Actor.new(666, 666)
+   actor = Actor(200, 200)
+   print(actor)
+   anotherActor = Actor(666, 666)
 
    cam = Camera(actor.pos.x, actor.pos.y)
    map = love.graphics.newImage("assets/blue.png")
