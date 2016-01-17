@@ -8,3 +8,8 @@ The plan originally was to have several fairly large chunks of map that could be
 |---+---+---|
 | 7 | 8 | 9 |
  -----------
+
+That shows the player in chunk 5 (which would obviously be displayed), with the 8 surrounding chunks that are loaded but not displayed. This arrangement assures that there wont be any unrendered crap, and we can afford that much performance NP.
+
+Code first, optimize later, shithead.
+
