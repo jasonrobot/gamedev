@@ -22,8 +22,10 @@ local function new (x, y)
    return t
 end
 
-print(foo)
-
 return setmetatable(
    {new = new},
-   {__call = function(_, ...) return new(...) end})
+   {__call = function(_, ...)
+       return new(...)
+   end
+   }
+)

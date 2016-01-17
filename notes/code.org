@@ -1,0 +1,10 @@
+Map Problems:
+Since I'm not using gamera, and hump.camera doesnt have a nice way to get the viewport, I'm going to have to do some kind of manual culling.
+The plan originally was to have several fairly large chunks of map that could be loaded on the fly and only drawn when needed. It would be something like:
+ -----------
+| 1 | 2 | 3 |
+|---+---+---|
+| 4 | P | 6 |
+|---+---+---|
+| 7 | 8 | 9 |
+ -----------

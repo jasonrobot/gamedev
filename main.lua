@@ -18,7 +18,7 @@ end
 
 function love.update (dt)
    actor.pos.x = actor.pos.x + 1
-   print(cam.x, cam.y)
+--   print(cam.x, cam.y)
    local dx, dy = actor.pos.x - cam.x, actor.pos.y - cam.y
 
    cam:move(dx/2, dy/2)
