@@ -2,6 +2,7 @@
 --- This object represents either a player, npc, or object that can be involved in the script
 
 local Actor = {}
+-- The deal with this is that we are both the metatable and the lookup resource for the new tables we construct
 Actor.__index = Actor
 setmetatable(Actor, {__index = _G})
 setfenv(1, Actor)
