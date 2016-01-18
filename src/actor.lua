@@ -7,8 +7,11 @@ Actor.__index = Actor
 setmetatable(Actor, {__index = _G})
 setfenv(1, Actor)
 
--- Constructor
-local function new (x, y)
+--- Constructor
+-- @param x
+-- @param y
+-- @param image This is a string path to the image. Do not pass a loaded image!
+local function new (x, y, image)
    t = {}
 
    t.pos = {
@@ -17,6 +20,8 @@ local function new (x, y)
       -- might never need this
       z = 0,
    }
+
+   t.sprite = love.graphics.newImage(image)
    
    t.pos.x = x
    t.pos.y = y
@@ -27,6 +32,19 @@ end
 function Actor:moveBy (x, y)
    self.pos.x = self.pos.x + x
    self.pos.y = self.pos.y + y
+
+end
+
+--- Draw this actor at its current coordinates.
+-- You should set the sprite before you do this.
+function Actor:draw ()
+   -- FIXME: this is hacky, make it work per instance
+   love.graphics.push()
+   
+   love.graphics.scale(0.25, 0.25)
+   love.graphics.draw(self.sprite, self.pos.x, self.pos.y)
+   
+   love.graphics.pop()
 
 end
 
