@@ -1,11 +1,12 @@
 -- main.lua
 -- entry point for the Love2d game engine
-local Camera = require "lib.hump.camera"
-local Signal = require "lib.hump.signal"
+package.path = package.path .. ";lib/?/init.lua;lib/?.lua;lib/hump/?.lua;src/?.lua"
+local Camera = require "camera"
+local Signal = require "signal"
 
-HC = require "lib.HC"
+HC = require "HC"
 
-local Actor = require "src.actor"
+local Actor = require "actor"
 
 local collisionMessage = {}
 
@@ -16,7 +17,7 @@ function love.load ()
 
    anotherActor = Actor(666, 666, "assets/placeholder.png")
 
-   cam = Camera(actor.pos.x, actor.pos.y)
+   cam = Camera(actor.ps:center())
    map = love.graphics.newImage("assets/blue.png")
 
    signalRegistry = Signal.new()
@@ -27,8 +28,9 @@ function love.update (dt)
    -- Handle input here
 
    actor:moveBy(1, 0)
---   print(cam.x, cam.y)
-   local dx, dy = actor.pos.x - cam.x, actor.pos.y - cam.y
+   --   print(cam.x, cam.y)
+   local ax, ay = actor.ps:center()
+   local dx, dy = ax - cam.x, ay - cam.y
 
    cam:move(dx/2, dy/2)
    

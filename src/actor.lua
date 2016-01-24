@@ -1,38 +1,29 @@
 ---- Actor.lua
 --- This object represents either a player, npc, or object that can be involved in the script
 
+HC = require "HC"
+
 local Actor = {}
 -- The deal with this is that we are both the metatable and the lookup resource for the new tables we construct
 Actor.__index = Actor
-setmetatable(Actor, {__index = _G})
-setfenv(1, Actor)
+--setfenv(1, Actor)
 
 --- Constructor
 -- @param x
 -- @param y
 -- @param image This is a string path to the image. Do not pass a loaded image!
 local function new (x, y, image)
-   t = {}
+   local sprite = love.graphics.newImage(image)
+   w, h = sprite:getDimensions()
 
-   t.pos = {
-      x = 0,
-      y = 0,
-      -- might never need this
-      z = 0,
-   }
+   local physicalSelf = HC.rectangle(x, y, w, h)
 
-   t.sprite = love.graphics.newImage(image)
-   
-   t.pos.x = x
-   t.pos.y = y
-   return setmetatable(t, Actor)
-
+   return setmetatable({spr = sprite, ps = physicalSelf}, Actor)
 end
 
 function Actor:moveBy (x, y)
-   self.pos.x = self.pos.x + x
-   self.pos.y = self.pos.y + y
-
+   self.ps:move(x, y)
+   
 end
 
 --- Draw this actor at its current coordinates.
@@ -42,16 +33,9 @@ function Actor:draw ()
    love.graphics.push()
    
    love.graphics.scale(0.25, 0.25)
-   love.graphics.draw(self.sprite, self.pos.x, self.pos.y)
+   love.graphics.draw(self.spr, self.ps:center())
    
-   love.graphics.pop()
-
+   love.graphics.pop()   
 end
 
-return setmetatable(
-   {new = new, moveBy = moveBy},
-   {__call = function(_, ...)
-       return new(...)
-   end,
-   }
-)
+return setmetatable({new = new},{__call = function(_, ...) return new(...) end})
