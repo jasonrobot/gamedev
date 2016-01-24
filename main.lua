@@ -4,13 +4,16 @@ package.path = package.path .. ";lib/?/init.lua;lib/?.lua;lib/hump/?.lua;src/?.l
 local Camera = require "camera"
 local Signal = require "signal"
 
-HC = require "HC"
-
 local Actor = require "actor"
 
 local collisionMessage = {}
 
 function love.load ()
+   -- Only ever called once. Load the scene manager here.
+
+   --Load the scene manager here.
+   --  Scene manager will load the maps and actors as needed.
+
    -- actor = Actor.new(200, 200)
    -- anotherActor = Actor.new(666, 666)
    actor = Actor(200, 200, "assets/placeholder.png")
@@ -26,6 +29,11 @@ end
 
 function love.update (dt)
    -- Handle input here
+
+   -- Call the controll handler to fire input events
+   --   This will move all the controlled actors
+   -- Call the AI routine to play a turn for NPC actors
+   -- Call the camera routine to update the camera location
 
    actor:moveBy(1, 0)
    --   print(cam.x, cam.y)
