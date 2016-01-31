@@ -8,6 +8,7 @@ local Actor = {}
 Actor.__index = Actor
 --setfenv(1, Actor)
 
+local intentions = {}
 
 
 
