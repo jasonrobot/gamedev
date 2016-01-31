@@ -1,4 +1,4 @@
-Map Problems:
+* Map Problems
 Since I'm not using gamera, and hump.camera doesnt have a nice way to get the viewport, I'm going to have to do some kind of manual culling.
 The plan originally was to have several fairly large chunks of map that could be loaded on the fly and only drawn when needed. It would be something like:
  -----------
@@ -13,3 +13,9 @@ That shows the player in chunk 5 (which would obviously be displayed), with the 
 
 Code first, optimize later, shithead.
 
+* Game Director and the Main loop
+Stuff the GameDirector does:
+- Set the window.
+- Load the map.
+- Load the relevant actors
+  - Its going to have to work with the camera to figure out who needs to be where.
