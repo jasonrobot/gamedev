@@ -1,10 +1,10 @@
 ---- MainMenu.lua
 --- This is the gamestate for the Main Menu
-local MainMenu = {}
-
-local Gamestate = "gamestate"
-
+local Gamestate = require "gamestate"
 local G = love.graphics
+local InGame = require "InGame"
+
+local state = {}
 
 local menuOptions = {
    "Start a new game",
@@ -15,7 +15,7 @@ local menuOptions = {
 
 local selectedOptionIndex = 1
 
-function MainMenu.draw()
+function state.draw()
    local strbuf = ''
    for i = 1, #menuOptions, 1 do
       if i == selectedOptionIndex then
@@ -28,14 +28,19 @@ function MainMenu.draw()
    
 end
 
-function MainMenu:keypressed(key, code)
+function state:keypressed(key, code)
    if key == 'down' then
       selectedOptionIndex = selectedOptionIndex + 1
    end
    if key == 'up' then
      selectedOptionIndex = selectedOptionIndex - 1
    end
+   if key == 'return' then
+      if selectedOptionIndex == 1 then
+	 Gamestate.switch(InGame)
+      end
+   end
    
 end
 
-return MainMenu
+return state
