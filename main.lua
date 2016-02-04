@@ -4,7 +4,7 @@ package.path = package.path .. ";lib/?/init.lua;lib/?.lua;lib/hump/?.lua;src/?.l
 --local G = love.graphics
 
 --local Camera = require "camera"
---local Signal = require "signal"
+Signal = require "signal"
 local Gamestate = require "gamestate"
 
 -- gamestates

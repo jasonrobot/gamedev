@@ -17,10 +17,6 @@ function Actor:update(dt)
 end
 
 function Actor:setKeyMap (newKeyMap, registry)
-   for handle, funktion in ipairs(newKeyMap) do
-      --register self:funktion() as a response to the handle signal
-      registry.register(handle, function () funktion(self) end)
-   end
    
 end
 
@@ -34,7 +30,14 @@ local function new (x, y, w, h)
    
    local physicalSelf = HC.rectangle(x, y, w, h)
 
-   return setmetatable({ps = physicalSelf}, Actor)
+   local t = {
+      ps = physicalSelf,
+      dx = 0,
+      dy = 0,
+      dMax = 250
+   }
+   return setmetatable(t, Actor)
 end
 
-return setmetatable({new = new},{__call = function(_, ...) return new(...) end})
+-- this in effect returns a class that can be called to create actors
+return setmetatable({},{__call = function(_, ...) return new(...) end})
