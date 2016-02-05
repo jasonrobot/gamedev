@@ -18,7 +18,7 @@ local state = {}
 
 local player
 
-local map
+local map = require "map"
 local cam
 
 --- GameState handlers and overrides ---
@@ -32,7 +32,8 @@ function state:init()
    HC.register(player.model.ps)
    Signal.register("draw", function () actor:draw() end)
 
-   map = G.newImage("assets/blue.png")   
+   -- map = G.newImage("assets/blue.png")
+   map.init()
    cam = Camera(0, 0)
 end
 
@@ -45,9 +46,10 @@ end
 function state:draw()
    cam:attach()
 
-   G.draw(map, 0, 0)
+   -- G.draw(map, 0,
+   map.drawTiles()
    Signal.emit("draw")
-   
+
    cam:detach()
 end
 
