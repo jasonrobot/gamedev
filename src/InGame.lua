@@ -55,4 +55,8 @@ function state:keypressed(key, code)
    Signal.emit(key)
 end
 
+function state:keyreleased(key, code)
+   Signal.emit(key .. '_released')
+end
+
 return state;

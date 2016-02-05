@@ -10,7 +10,6 @@ local function new(newModel)
    return setmetatable({model = newModel}, PlayerController)
 end
 
-
 function PlayerController:up()
    self.model.dy = self.model.dy - self.model.dMax
 end
@@ -32,6 +31,11 @@ function PlayerController:register()
    Signal.register('down', function() self.down(self) end)
    Signal.register('right', function() self.right(self) end)
    Signal.register('left', function() self.left(self) end)
+
+   Signal.register('down_released', function() self.up(self) end)
+   Signal.register('up_released', function() self.down(self) end)
+   Signal.register('left_released', function() self.right(self) end)
+   Signal.register('right_released', function() self.left(self) end)
    
 end
 

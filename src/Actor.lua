@@ -1,4 +1,4 @@
----- Actor.lua
+}---- Actor.lua
 --- This object represents either a player, npc, or object that can be involved in the script
 
 local HC = require "HC"
@@ -14,10 +14,6 @@ end
 
 function Actor:update(dt)
    self.ps:move(self.dx * dt, self.dy * dt)
-end
-
-function Actor:setKeyMap (newKeyMap, registry)
-   
 end
 
 --- Constructor

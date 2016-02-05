@@ -1,6 +1,7 @@
 -- Configuration
 function love.conf(t)
-   t.title = "Tutorial Thing" --window title
+   t.title = "The Game" --window title
    t.version = "0.10.0"
+   t.window.fullscreen = true
 end
 
