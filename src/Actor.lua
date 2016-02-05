@@ -1,4 +1,4 @@
-}---- Actor.lua
+---- Actor.lua
 --- This object represents either a player, npc, or object that can be involved in the script
 
 local HC = require "HC"

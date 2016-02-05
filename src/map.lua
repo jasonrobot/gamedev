@@ -31,7 +31,12 @@ end
 
 function map.getTiles(x, y)
    center.moveTo(x, y)
-   --iterate cols
+   local collidedShapes = {}
+   for shape, delta in pairs(world:collisions(center)) do
+      collidedShapes.push(shape)
+   end
+   for image, shape in next, collidedShapes do
+      
 
 end
 
