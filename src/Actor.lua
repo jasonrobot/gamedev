@@ -24,10 +24,10 @@ local function new (x, y, w, h)
 --   local sprite = G.newImage(image)
 --   local w, h = sprite:getDimensions()
    
-   local physicalSelf = HC.rectangle(x, y, w, h)
+   -- local physicalSelf = HC.rectangle(x, y, w, h)
 
    local t = {
-      ps = physicalSelf,
+      ps = HC.rectangle(x, y, w, h),
       dx = 0,
       dy = 0,
       dMax = 250

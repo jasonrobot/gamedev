@@ -26,7 +26,7 @@ function PlayerController.left(self)
    self.model.dx = self.model.dx - self.model.dMax
 end
 
-function PlayerController:register()
+function PlayerController:registerCallbacks()
    Signal.register('up', function() self.up(self) end)
    Signal.register('down', function() self.down(self) end)
    Signal.register('right', function() self.right(self) end)

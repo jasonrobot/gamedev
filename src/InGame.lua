@@ -23,16 +23,19 @@ local cam
 
 --- GameState handlers and overrides ---
 function state:init()
-   local actor = Actor(0, 0, 100, 100)
-   print(actor)
+   local actor = Actor(0, 0, 36, 36)
+   print("first: ", actor, actor.ps)
    player = PlayerController(actor)
-   player:register()
-   print(player.model)
-   player:update(1)
-   HC.register(player.model.ps)
+   player:registerCallbacks()
+   HC.register(actor.ps)
    Signal.register("draw", function () actor:draw() end)
 
-   -- map = G.newImage("assets/blue.png")
+   local actor = Actor(1200, 1200, 36, 36)
+   print("second", actor, actor.ps)
+   HC.register(actor.ps)
+   Signal.register("draw", function () actor:draw() end)
+
+   mapImage = G.newImage("assets/blue.png")
    map.init()
    cam = Camera(0, 0)
 end
@@ -46,8 +49,7 @@ end
 function state:draw()
    cam:attach()
 
-   -- G.draw(map, 0,
-   map.drawTiles()
+   map.drawTiles(player.model.ps:center())
    Signal.emit("draw")
 
    cam:detach()

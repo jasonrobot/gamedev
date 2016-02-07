@@ -16,6 +16,8 @@ local center = world:circle(0, 0, G.getWidth())
 local Tile = {}
 function Tile.new(imagePath, x, y)
    local t =  {}
+   t.x = x
+   t.y = y
    t.image = G.newImage(imagePath)
    t.shape = world:rectangle(x, y, tileScale, tileScale)
    return t
@@ -25,6 +27,9 @@ local tiles = {}
 
 function map.init()
    table.insert(tiles, Tile.new('assets/blue.png', 0, 0))
+   table.insert(tiles, Tile.new('assets/red.png', -tileScale, 0))
+   table.insert(tiles, Tile.new('assets/green.png', -tileScale, -tileScale))
+   table.insert(tiles, Tile.new('assets/purple.png', 0, -tileScale))
 
 end
 
@@ -36,7 +41,8 @@ function map.drawTiles(x, y)
    -- end
    -- for image, shape in next, collidedShapes do
    for i, t in next, tiles do
-      G.draw(t.image, t.shape:center())
+      G.draw(t.image, t.x, t.y)
+      
    end
 
 end
