@@ -16,40 +16,52 @@ local PlayerController = require "PlayerKeymap"
 --local table
 local state = {}
 
-local player
-
 local map = require "map"
 local cam
 
+local actors = {}
+
 --- GameState handlers and overrides ---
 function state:init()
+   -- table.insert(actors, 'mainActor', Actor(0, 0, 36, 36))
    local actor = Actor(0, 0, 36, 36)
-   print("first: ", actor, actor.ps)
-   player = PlayerController(actor)
+   local actorName = 'mainActor'
+   actors[actorName] = actor
+   local player = PlayerController(actor)
    player:registerCallbacks()
    HC.register(actor.ps)
    Signal.register("draw", function () actor:draw() end)
+   Signal.register("update", function (dt) player:update(dt) end)
 
-   local actor = Actor(1200, 1200, 36, 36)
-   print("second", actor, actor.ps)
+   local actor = Actor(48, 48, 36, 36)
+   local player = PlayerController(actor)
+   player:registerCallbacks()
    HC.register(actor.ps)
    Signal.register("draw", function () actor:draw() end)
+   Signal.register("update", function (dt) player:update(dt) end)   
 
-   mapImage = G.newImage("assets/blue.png")
+   local actor = Actor(1200, 1200, 36, 36)
+   HC.register(actor.ps)
+   Signal.register("draw", function () actor:draw() end)
+   Signal.register("update", function (dt) actor:update(dt) end)   
+
+   --"isometric" map image
+--   mapImage = G.newImage("assets/blue-iso.png")
    map.init()
    cam = Camera(0, 0)
 end
 
 function state:update(dt)
-   player:update(dt)
-   cam:lookAt(player.model.ps:center())
+   Signal.emit("update", dt)
+   cam:lookAt(actors.mainActor.ps:center())
    
 end
 
 function state:draw()
    cam:attach()
 
-   map.drawTiles(player.model.ps:center())
+--   G.draw(mapImage, -1500, -1500)
+   map.drawTiles(cam:position())
    Signal.emit("draw")
 
    cam:detach()
