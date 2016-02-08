@@ -1,18 +1,18 @@
----- Actor.lua
+---- Object.lua
 --- This object represents either a player, npc, or object that can be involved in the script
 
 local HC = require "HC"
 --local G = love.graphics
-local Actor = {}
+local Object = {}
 -- The deal with this is that we are both the metatable and the lookup resource for the new tables we construct
-Actor.__index = Actor
+Object.__index = Object
 
-function Actor:draw ()
+function Object:draw ()
    self.ps:draw("fill")
 
 end
 
-function Actor:update(dt)
+function Object:update(dt)
    self.ps:move(self.dx * dt, self.dy * dt)
 end
 
@@ -32,7 +32,7 @@ local function new (x, y, w, h)
       dy = 0,
       dMax = 250
    }
-   return setmetatable(t, Actor)
+   return setmetatable(t, Object)
 end
 
 -- this in effect returns a class that can be called to create actors
