@@ -24,19 +24,11 @@ local objects = {}
 --- GameState handlers and overrides ---
 function state:init()
    objects.mainObject = PlayerController(Object(0, 0, 36, 36))
-   -- Signal.register("draw", function () actor:draw() end)
-   -- Signal.register("update", function (dt) player:update(dt) end)
 
-   -- local actor = Object(48, 48, 36, 36)
-   -- local player = PlayerController(actor)
+   objects.anotherObject = PlayerController(Object(48, 48, 36, 36))
 
+   objects.static = Object(1200, 1200, 128, 128)
 
-   -- local actor = Object(1200, 1200, 36, 36)
-   -- Signal.register("draw", function () actor:draw() end)
-   -- Signal.register("update", function (dt) actor:update(dt) end)   
-
-   --"isometric" map image
---   mapImage = G.newImage("assets/blue-iso.png")
    Map.init()
    cam = Camera(0, 0)
 end
