@@ -7,53 +7,35 @@ local G = love.graphics
 
 local Camera = require "camera"
 -- Signal = require "signal"
-local HC = require "HC"
+HC = require "HC"
 
-local Actor = require "Actor"
-local PlayerController = require "PlayerKeymap"
+local Object = require "Object"
+local PlayerController = require "PlayerController"
 --local Gamestate = require "gamestate"
 
 --local table
 local state = {}
 
-local map = require "map"
+local Map = require "Map"
 local cam
 
-local actors = {}
+local objects = {}
 
 --- GameState handlers and overrides ---
 function state:init()
-   -- table.insert(actors, 'mainActor', Actor(0, 0, 36, 36))
-   local actor = Actor(0, 0, 36, 36)
-   local actorName = 'mainActor'
-   actors[actorName] = actor
-   local player = PlayerController(actor)
-   player:registerCallbacks()
-   HC.register(actor.ps)
-   Signal.register("draw", function () actor:draw() end)
-   Signal.register("update", function (dt) player:update(dt) end)
+   objects.mainObject = PlayerController(Object(0, 0, 36, 36))
 
-   local actor = Actor(48, 48, 36, 36)
-   local player = PlayerController(actor)
-   player:registerCallbacks()
-   HC.register(actor.ps)
-   Signal.register("draw", function () actor:draw() end)
-   Signal.register("update", function (dt) player:update(dt) end)   
+   objects.anotherObject = PlayerController(Object(48, 48, 36, 36))
 
-   local actor = Actor(1200, 1200, 36, 36)
-   HC.register(actor.ps)
-   Signal.register("draw", function () actor:draw() end)
-   Signal.register("update", function (dt) actor:update(dt) end)   
+   objects.static = Object(1200, 1200, 128, 128)
 
-   --"isometric" map image
---   mapImage = G.newImage("assets/blue-iso.png")
-   map.init()
+   Map.init()
    cam = Camera(0, 0)
 end
 
 function state:update(dt)
-   Signal.emit("update", dt)
-   cam:lookAt(actors.mainActor.ps:center())
+   Signal.emit('update', dt)
+   cam:lookAt(objects.mainObject:getCenter())
    
 end
 
@@ -61,7 +43,7 @@ function state:draw()
    cam:attach()
 
 --   G.draw(mapImage, -1500, -1500)
-   map.drawTiles(cam:position())
+   Map.drawTiles(cam:position())
    Signal.emit("draw")
 
    cam:detach()

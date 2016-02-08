@@ -1,29 +1,34 @@
 ---- PlayerKeymap.lua
 --- This is really the controller for an actor class that uses player input
---- Depends on Actor.lua
--- local Signal = require 'hump.signal'
+--- Depends on Object.lua
 
 local PlayerController = {}
 PlayerController.__index = PlayerController
 
-local function new(newModel)
-   return setmetatable({model = newModel}, PlayerController)
+local function new(newObject)
+   local t = setmetatable({object = newObject}, PlayerController)
+   t:registerCallbacks()
+   return t
+end
+
+function PlayerController:getCenter()
+   return self.object:getCenter()
 end
 
 function PlayerController:up()
-   self.model.dy = self.model.dy - self.model.dMax
+   self.object.dy = self.object.dy - self.object.dMax
 end
 
 function PlayerController:down()
-   self.model.dy = self.model.dy + self.model.dMax
+   self.object.dy = self.object.dy + self.object.dMax
 end
 
 function PlayerController:right()
-   self.model.dx = self.model.dx + self.model.dMax
+   self.object.dx = self.object.dx + self.object.dMax
 end
 
 function PlayerController.left(self)
-   self.model.dx = self.model.dx - self.model.dMax
+   self.object.dx = self.object.dx - self.object.dMax
 end
 
 function PlayerController:registerCallbacks()
@@ -40,7 +45,7 @@ function PlayerController:registerCallbacks()
 end
 
 function PlayerController:update(dt)
-   self.model:update(dt)
+   self.object:update(dt)
 end
 
 return setmetatable({}, {__call = function(_,...) return new(...) end})
