@@ -7,7 +7,7 @@ local G = love.graphics
 
 local Camera = require "camera"
 -- Signal = require "signal"
-local HC = require "HC"
+HC = require "HC"
 
 local Object = require "Object"
 local PlayerController = require "PlayerController"
@@ -19,31 +19,21 @@ local state = {}
 local Map = require "Map"
 local cam
 
-local actors = {}
+local objects = {}
 
 --- GameState handlers and overrides ---
 function state:init()
-   -- table.insert(actors, 'mainObject', Object(0, 0, 36, 36))
-   local actor = Object(0, 0, 36, 36)
-   local actorName = 'mainObject'
-   actors[actorName] = actor
-   local player = PlayerController(actor)
-   player:registerCallbacks()
-   HC.register(actor.ps)
-   Signal.register("draw", function () actor:draw() end)
-   Signal.register("update", function (dt) player:update(dt) end)
+   objects.mainObject = PlayerController(Object(0, 0, 36, 36))
+   -- Signal.register("draw", function () actor:draw() end)
+   -- Signal.register("update", function (dt) player:update(dt) end)
 
-   local actor = Object(48, 48, 36, 36)
-   local player = PlayerController(actor)
-   player:registerCallbacks()
-   HC.register(actor.ps)
-   Signal.register("draw", function () actor:draw() end)
-   Signal.register("update", function (dt) player:update(dt) end)   
+   -- local actor = Object(48, 48, 36, 36)
+   -- local player = PlayerController(actor)
 
-   local actor = Object(1200, 1200, 36, 36)
-   HC.register(actor.ps)
-   Signal.register("draw", function () actor:draw() end)
-   Signal.register("update", function (dt) actor:update(dt) end)   
+
+   -- local actor = Object(1200, 1200, 36, 36)
+   -- Signal.register("draw", function () actor:draw() end)
+   -- Signal.register("update", function (dt) actor:update(dt) end)   
 
    --"isometric" map image
 --   mapImage = G.newImage("assets/blue-iso.png")
@@ -52,8 +42,8 @@ function state:init()
 end
 
 function state:update(dt)
-   Signal.emit("update", dt)
-   cam:lookAt(actors.mainObject.ps:center())
+   Signal.emit('update', dt)
+   cam:lookAt(objects.mainObject:getCenter())
    
 end
 
