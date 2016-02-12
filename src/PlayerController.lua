@@ -7,6 +7,7 @@ PlayerController.__index = PlayerController
 
 local function new(newObject)
    local t = setmetatable({object = newObject}, PlayerController)
+   -- do we really want to do this this way?
    t:registerCallbacks()
    return t
 end
@@ -41,7 +42,9 @@ function PlayerController:registerCallbacks()
    Signal.register('up_released', function() self.down(self) end)
    Signal.register('left_released', function() self.right(self) end)
    Signal.register('right_released', function() self.left(self) end)
-   
+
+   Signal.register("update", function (dt) self.update(self, dt) end)   
+
 end
 
 function PlayerController:update(dt)

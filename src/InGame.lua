@@ -11,6 +11,7 @@ HC = require "HC"
 
 local Object = require "Object"
 local PlayerController = require "PlayerController"
+local FollowerController = require "FollowerController"
 --local Gamestate = require "gamestate"
 
 --local table
@@ -25,16 +26,25 @@ local objects = {}
 function state:init()
    objects.mainObject = PlayerController(Object(0, 0, 36, 36))
 
-   objects.anotherObject = PlayerController(Object(48, 48, 36, 36))
+--   objects.anotherObject = PlayerController(Object(48, 48, 36, 36))
 
-   objects.static = Object(1200, 1200, 128, 128)
+   objects.static = Object(200, 300, 128, 128)
+
+   objects.follower = FollowerController(Object(0, 1000, 24, 24), objects.mainObject)
 
    Map.init()
    cam = Camera(0, 0)
+   for k, v in next, objects do
+      print(k, v.ps or v.object.ps)
+   end
+   
 end
 
 function state:update(dt)
-   Signal.emit('update', dt)
+   for k, v in next, objects do
+      v:update(dt)
+   end
+   
    cam:lookAt(objects.mainObject:getCenter())
    
 end

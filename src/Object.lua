@@ -3,10 +3,13 @@
 
 local HC = require "HC"
 -- local G = love.graphics
+local abs = math.abs
 
 local Object = {}
 -- The deal with this is that we are both the metatable and the lookup resource for the new tables we construct
 Object.__index = Object
+
+local dMax = 250
 
 --- Constructor
 -- @param x
@@ -16,10 +19,9 @@ local function new (x, y, w, h)
    local t = setmetatable({ps = HC.rectangle(x, y, w, h),
 			   dx = 0,
 			   dy = 0,
-			   dMax = 250}, Object)
+			   dMax = dMax}, Object)
    HC.register(t.ps)
    Signal.register("draw", function () t:draw() end)
-   Signal.register("update", function (dt) t:update(dt) end)   
    return t
 end
 
@@ -33,6 +35,15 @@ function Object:draw ()
 end
 
 function Object:update(dt)
+   if abs(self.dx) > dMax then
+      if self.dx > 0 then self.dx = dMax end
+      if self.dx < 0 then self.dx = -dMax end
+   end
+   if abs(self.dy) >= dMax then
+      if self.dy > 0 then self.dy = dMax end
+      if self.dy < 0 then self.dy = -dMax end
+   end
+
    self.ps:move(self.dx * dt, self.dy * dt)
 end
 
