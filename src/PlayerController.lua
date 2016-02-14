@@ -16,35 +16,21 @@ function PlayerController:getCenter()
    return self.object:getCenter()
 end
 
-function PlayerController:up()
-   self.object.dy = self.object.dy - self.object.dMax
-end
-
-function PlayerController:down()
-   self.object.dy = self.object.dy + self.object.dMax
-end
-
-function PlayerController:right()
-   self.object.dx = self.object.dx + self.object.dMax
-end
-
-function PlayerController.left(self)
-   self.object.dx = self.object.dx - self.object.dMax
-end
-
 function PlayerController:registerCallbacks()
-   Signal.register('up', function() self.up(self) end)
-   Signal.register('down', function() self.down(self) end)
-   Signal.register('right', function() self.right(self) end)
-   Signal.register('left', function() self.left(self) end)
+   -- self.object.intentions.up = false
+   -- self.object.intentions.down = false
+   -- self.object.intentions.left = false
+   -- self.object.intentions.right = false
 
-   Signal.register('down_released', function() self.up(self) end)
-   Signal.register('up_released', function() self.down(self) end)
-   Signal.register('left_released', function() self.right(self) end)
-   Signal.register('right_released', function() self.left(self) end)
+   Signal.register('up', function() self.object.intentions.up = true end)
+   Signal.register('down', function() self.object.intentions.down = true end)
+   Signal.register('left', function() self.object.intentions.left = true end)
+   Signal.register('right', function() self.object.intentions.right = true end)
 
-   Signal.register("update", function (dt) self.update(self, dt) end)   
-
+   Signal.register('up_released', function() self.object.intentions.up = false end)
+   Signal.register('down_released', function() self.object.intentions.down = false end)
+   Signal.register('left_released', function() self.object.intentions.left = false end)
+   Signal.register('right_released', function() self.object.intentions.right = false end)
 end
 
 function PlayerController:update(dt)
