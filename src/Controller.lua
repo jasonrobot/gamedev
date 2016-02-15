@@ -12,4 +12,8 @@ function Controller:update(dt)
    self.object:update(dt)
 end
 
+function Controller:fixCollision(dx, dy)
+   self.object:fixCollision(dx, dy)
+end
+
 return Controller
