@@ -86,10 +86,6 @@ function Object:fixCollision(dx, dy)
    self.intentions.left or self.intentions.right then
       if dx ~= 0 then self.vel.x = 0 end
       if dy ~= 0 then self.vel.y = 0 end
-      -- if dx > 0 then dx = dx + 1
-      -- elseif dy < 0 then dy = dy - 1 end
-      -- if dy > 0 then dy = dy + 1
-      -- elseif dy < 0 then dy = dy - 1 end
       
       self.ps:move(dx, dy)
       
