@@ -81,6 +81,21 @@ function Object:doIntentions()
    end   
 end
 
+function Object:fixCollision(dx, dy)
+   if self.intentions.up or self.intentions.down or
+   self.intentions.left or self.intentions.right then
+      if dx ~= 0 then self.vel.x = 0 end
+      if dy ~= 0 then self.vel.y = 0 end
+      -- if dx > 0 then dx = dx + 1
+      -- elseif dy < 0 then dy = dy - 1 end
+      -- if dy > 0 then dy = dy + 1
+      -- elseif dy < 0 then dy = dy - 1 end
+      
+      self.ps:move(dx, dy)
+      
+   end
+end
+
 function Object:update(dt)
    self:doIntentions()
    self.vel = self.vel + self.acc
