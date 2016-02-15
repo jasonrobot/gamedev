@@ -1,7 +1,9 @@
 ---- FollowerController.lua
 --- This controls an Actor object that just follows the player
 
-local FollowerController = {}
+local Controller = require 'Controller'
+
+local FollowerController = setmetatable({}, Controller)
 FollowerController.__index = FollowerController
 
 local followDistance = 100

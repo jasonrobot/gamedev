@@ -5,19 +5,20 @@
 -- imports &c
 local G = love.graphics
 
-local Camera = require "camera"
--- Signal = require "signal"
-HC = require "HC"
+local Camera = require 'camera'
+-- Signal = require 'signal'
+HC = require 'HC'
 
-local Object = require "Object"
-local PlayerController = require "PlayerController"
-local FollowerController = require "FollowerController"
---local Gamestate = require "gamestate"
+local Object = require 'Object'
+local PlayerController = require 'PlayerController'
+local FollowerController = require 'FollowerController'
+local ShimController = require 'ShimController'
+--local Gamestate = require 'gamestate'
 
 --local table
 local state = {}
 
-local Map = require "Map"
+local Map = require 'Map'
 local cam
 
 local objects = {}
@@ -28,7 +29,7 @@ function state:init()
 
 --   objects.anotherObject = PlayerController(Object(48, 48, 36, 36))
 
-   objects.static = Object(200, 300, 128, 128)
+   objects.static = ShimController(Object(200, 300, 128, 128))
 
    objects.follower = FollowerController(Object(0, 1000, 24, 24), objects.mainObject)
 
@@ -54,7 +55,7 @@ function state:draw()
 
 --   G.draw(mapImage, -1500, -1500)
    Map.drawTiles(cam:position())
-   Signal.emit("draw")
+   Signal.emit('draw')
 
    cam:detach()
 end

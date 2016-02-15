@@ -1,8 +1,9 @@
 ---- PlayerKeymap.lua
 --- This is really the controller for an actor class that uses player input
 --- Depends on Object.lua
+local Controller = require 'Controller'
 
-local PlayerController = {}
+local PlayerController = setmetatable({}, Controller)
 PlayerController.__index = PlayerController
 
 local function new(newObject)
@@ -10,10 +11,6 @@ local function new(newObject)
    -- do we really want to do this this way?
    t:registerCallbacks()
    return t
-end
-
-function PlayerController:getCenter()
-   return self.object:getCenter()
 end
 
 function PlayerController:registerCallbacks()
@@ -31,10 +28,6 @@ function PlayerController:registerCallbacks()
    Signal.register('down_released', function() self.object.intentions.down = false end)
    Signal.register('left_released', function() self.object.intentions.left = false end)
    Signal.register('right_released', function() self.object.intentions.right = false end)
-end
-
-function PlayerController:update(dt)
-   self.object:update(dt)
 end
 
 return setmetatable({}, {__call = function(_,...) return new(...) end})
