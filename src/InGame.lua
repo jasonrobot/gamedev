@@ -8,6 +8,7 @@ local G = love.graphics
 local Camera = require 'camera'
 -- Signal = require 'signal'
 local HC = require 'HC'
+local STI = require 'STI'
 
 local Object = require 'Object'
 local PlayerController = require 'PlayerController'
@@ -20,6 +21,7 @@ local state = {}
 
 local Map = require 'Map'
 local cam
+local map
 
 local entities = {}
 
@@ -33,7 +35,14 @@ function state:init()
 
    entities.follower = FollowerController(Object(0, 1000, 24, 24), entities.mainObject)
 
-   Map.init()
+   --   Map.init()
+   
+   map = STI.new('assets/tiled-test.lua')
+
+   for k, v in next, map.objects do
+      entities['static_' .. k] = ShimController(Object(v.x, v.y, v.width, v.height))
+   end
+      
    cam = Camera(0, 0)
    for k, v in next, entities do
       print(k, v.ps or v.object.ps)
@@ -47,7 +56,6 @@ function state:update(dt)
       for other in pairs(HC.neighbors(v.object.ps)) do
 	 local collides, dx, dy = v.object.ps:collidesWith(other)
 	 if collides then
-	    print('Collided!', dx, dy)
 	    v:fixCollision(dx, dy)
 	 end
       end
@@ -59,6 +67,8 @@ end
 
 function state:draw()
    cam:attach()
+
+   map:draw()
 
 --   G.draw(mapImage, -1500, -1500)
    Map.drawTiles(cam:position())
