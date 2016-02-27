@@ -1,8 +1,11 @@
----- PlayerKeymap.lua
+---- PlayerController.lua
 --- This is really the controller for an actor class that uses player input
 --- Depends on Object.lua
 -- global Signal = require 'hump.signal'
+local HC = require 'HC'
+
 local Controller = require 'Controller'
+local TargetLocator = require 'TargetLocator'
 
 local PlayerController = setmetatable({}, Controller)
 PlayerController.__index = PlayerController
@@ -10,19 +13,22 @@ PlayerController.__index = PlayerController
 local function new(newObject)
    local t = {}
    t.object = newObject
-   local x, y = newObject.getCenter()
+   local x, y = newObject:getCenter()
    local w, h = love.window.getMode()
-   x = x - w/2
-   y = y - h/2
-   -- FIXME each object or entity should just have one of these shapes on hand at all times
-   local shape = HC.rectangle(x, y, w, h)
+   local targetDetectorShape = HC.rectangle(x-(w/2), y-(h/2), w, h)
+   targetDetectorShape.fakeObject = true
+   t.targetLocator = TargetLocator(targetDetectorShape)
 
-   t.entityVision = HC.rectangle()
+
    t = setmetatable(t, PlayerController)
    -- do we really want to do this this way?
-   t:registerCallbacks()
-   
+   t:registerCallbacks()   
    return t
+end
+
+function PlayerController:update(dt)
+   self.object:update(dt)
+   self.targetLocator:updatePosition(self.object:getCenter())
 end
 
 function PlayerController:registerCallbacks()
@@ -40,8 +46,8 @@ function PlayerController:registerCallbacks()
    Signal.register('down_released', function() self.object.intentions.down = false end)
    Signal.register('left_released', function() self.object.intentions.left = false end)
    Signal.register('right_released', function() self.object.intentions.right = false end)
+
+   Signal.register('space', function() self.targetLocator:seekTargets() end)
 end
-
-
 
 return setmetatable({}, {__call = function(_,...) return new(...) end})
