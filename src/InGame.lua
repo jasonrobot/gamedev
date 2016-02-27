@@ -1,5 +1,5 @@
----- InGame.lua
---- This is the main gamestate where all the play takes place
+--- InGame.lua
+-- This is the main gamestate where all the play takes place
 -- This object is a singleton, there is only ever one instance
 
 -- imports &c
@@ -31,7 +31,7 @@ function state:init()
 
 --   entities.anotherObject = PlayerController(Object(48, 48, 36, 36))
 
-   entities.static = ShimController(Object(200, 300, 128, 128))
+--   entities.static = ShimController(Object(200, 300, 128, 128))
 
    entities.follower = FollowerController(Object(0, 1000, 24, 24), entities.mainObject)
 
@@ -61,6 +61,8 @@ function state:update(dt)
       end
    end   
 
+   map:update(dt)
+
    cam:lookAt(entities.mainObject:getCenter())
    
 end
@@ -70,8 +72,6 @@ function state:draw()
 
    map:draw()
 
---   G.draw(mapImage, -1500, -1500)
-   Map.drawTiles(cam:position())
    Signal.emit('draw')
 
    cam:detach()
