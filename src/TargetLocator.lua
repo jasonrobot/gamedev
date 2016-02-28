@@ -15,6 +15,7 @@ end
 
 function TargetLocator:startTargeting()
    local targets = self.seekTargets(self)
+   self.currentTarget = next(targets)
 end
 
 function TargetLocator:stopTargeting()
@@ -26,17 +27,26 @@ end
 
 -- affirms that a target can be targeted
 -- @param entity the target entity
-function TargetLocator:validateEntity(entity)
-   --
+function TargetLocator:validateCurrentTarget()
+   -- target is not us
+   if vector_light.dist(self.detectorShape:center(), tx, ty) < 3 then
+      return false
+   end
+   -- is still on screen
+   if not self.currentTarget:collidesWith(detectorShape) then
+      return false
+   end
+   return true
 end
 
 -- finds new valid targets
 -- @return an array of objects for targeting
 function TargetLocator:seekTargets()
-   for k, v in next, HC.collisions(self.detectorShape) do
-      print(k, v.x, v.y)
+   local targets = HC.collisions(self.detectorShape)
+   for k, v in next, targets do
+      print(k)
    end
-   
+   return targets
 end
 
 function TargetLocator:updatePosition(x, y)
