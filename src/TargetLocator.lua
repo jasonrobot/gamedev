@@ -1,6 +1,7 @@
 --- TargetLocator.lua
 -- This handles target detection for entities
 local HC = require 'HC'
+local vector_light = require 'hump.vector-light'
 
 local TargetLocator = {}
 TargetLocator.__index = TargetLocator
@@ -19,6 +20,7 @@ function TargetLocator:startTargeting()
 end
 
 function TargetLocator:stopTargeting()
+   --I dunno
 end
 
 -- A wrapper to alterTarget that does logic to make this a nice game usable operation
@@ -33,7 +35,7 @@ function TargetLocator:validateCurrentTarget()
       return false
    end
    -- is still on screen
-   if not self.currentTarget:collidesWith(detectorShape) then
+   if not self.currentTarget:collidesWith(self.detectorShape) then
       return false
    end
    return true
