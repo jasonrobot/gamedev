@@ -56,7 +56,7 @@ function PlayerController:registerCallbacks()
    Signal.register('left_released', function() self.object.intentions.left = false end)
    Signal.register('right_released', function() self.object.intentions.right = false end)
 
-   Signal.register('space', function() self.targetLocator:startTargeting() end)
+   Signal.register('space', function() self.targetLocator:nextTarget() end)
 end
 
 return setmetatable({}, {__call = function(_,...) return new(...) end})
