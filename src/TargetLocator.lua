@@ -1,58 +1,67 @@
 --- TargetLocator.lua
 -- This handles target detection for entities
+-- it provides two functions, :nextTarget() and :previousTarget() that each
+-- return an object to target
+-- probably eventually you can pass it a targeting strategy function
 local HC = require 'HC'
 local vector_light = require 'hump.vector-light'
 
 local TargetLocator = {}
 TargetLocator.__index = TargetLocator
 
-local function new(targetDetectorShape)
-   local t = {}
-   t.detectorShape = targetDetectorShape
+-- Chooses a target from multiple options
+-- @param x
+-- @param y
+-- @param targets An array of objects
+local defaultDetectionStrategy = function (x, y, targets)
+   local best
+   for k, v in next, targets do
+      if best == nil then best = v
+      else if vector_light.dist(x, y, v:center()) < vector_light.dist(x, y, best:center()) then
+	    best = v
+	   end
+      end
+   end
+end
 
+local function new(targetDetector, detectionStrategy)
+   local t = {}
+   t.detector = targetDetector
+   if detectionStrategy == nil then
+      t.strategy = defaultDetectionStrategy
+   else
+      t.strategy = detectionStrategy
+   end
+   
    t = setmetatable(t, TargetLocator)
    return t
 end
 
-function TargetLocator:startTargeting()
-   local targets = self.seekTargets(self)
-   self.currentTarget = next(targets)
+function TargetLocator:seekTargets()
+   return HC.collisions(self.detector)
 end
 
-function TargetLocator:stopTargeting()
-   --I dunno
-end
-
--- A wrapper to alterTarget that does logic to make this a nice game usable operation
-function TargetLocator:changeTarget()
+function TargetLocator:nextTarget()
+   self.currentTarget = self.strategy(self.detector:center(), self.seekTargets(self))  
 end
 
 -- affirms that a target can be targeted
 -- @param entity the target entity
-function TargetLocator:validateCurrentTarget()
+function TargetLocator:isTargetValid(target)
+   if target == nil then return true end
    -- target is not us
-   if vector_light.dist(self.detectorShape:center(), tx, ty) < 3 then
+   if vector_light.dist(self.detector:center(), target:center()) < 3 then
       return false
    end
    -- is still on screen
-   if not self.currentTarget:collidesWith(self.detectorShape) then
+   if not target:collidesWith(self.detector) then
       return false
    end
    return true
 end
 
--- finds new valid targets
--- @return an array of objects for targeting
-function TargetLocator:seekTargets()
-   local targets = HC.collisions(self.detectorShape)
-   for k, v in next, targets do
-      print(k)
-   end
-   return targets
-end
-
 function TargetLocator:updatePosition(x, y)
-   self.detectorShape:moveTo(x, y)
+   self.detector:moveTo(x, y)
 end
 
 return setmetatable({}, {__call = function(_, ...) return new(...) end})
