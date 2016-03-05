@@ -33,7 +33,7 @@ function state:init()
 
 --   entities.static = ShimController(Object(200, 300, 128, 128))
 
---   entities.follower = FollowerController(Object(0, 1000, 24, 24), entities.mainObject)
+   entities.follower = FollowerController(Object(0, 1000, 24, 24), entities.mainObject)
 
    --   Map.init()
    
