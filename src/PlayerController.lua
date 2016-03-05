@@ -30,13 +30,13 @@ end
 function PlayerController:update(dt)
    self.object:update(dt)
    self.targetLocator:updatePosition(self.object:getCenter())
-   
 end
 
 function PlayerController:drawAim()
    if not self.targetLocator.currentTarget then
       return
    end
+   
    local x, y = self.object:getCenter()
    local tx, ty = self.targetLocator.currentTarget:center()
    tx, ty = vector_light.sub(tx, ty, x, y)

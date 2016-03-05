@@ -16,12 +16,14 @@ TargetLocator.__index = TargetLocator
 local defaultDetectionStrategy = function (x, y, targets)
    local best
    for k, v in next, targets do
-      if best == nil then best = v
-      else if vector_light.dist(x, y, v:center()) < vector_light.dist(x, y, best:center()) then
-	    best = v
+      if best == nil then best = k
+      else if vector_light.dist(x, y, k:center()) < vector_light.dist(x, y, best:center())
+	 and vector_light.dist(x, y, k:center()) > 3 then
+	    best = k
 	   end
       end
    end
+   return best
 end
 
 local function new(targetDetector, detectionStrategy)
@@ -42,7 +44,9 @@ function TargetLocator:seekTargets()
 end
 
 function TargetLocator:nextTarget()
-   self.currentTarget = self.strategy(self.detector:center(), self.seekTargets(self))  
+   local x, y = self.detector:center()
+   self.currentTarget = self.strategy(x, y, self.seekTargets(self))
+   print(self.currentTarget)
 end
 
 -- affirms that a target can be targeted
@@ -55,6 +59,7 @@ function TargetLocator:isTargetValid(target)
    end
    -- is still on screen
    if not target:collidesWith(self.detector) then
+      print('did not collide')
       return false
    end
    return true
@@ -62,6 +67,12 @@ end
 
 function TargetLocator:updatePosition(x, y)
    self.detector:moveTo(x, y)
+   print(self.detector, self.currentTarget)
+   
+   if self.currentTarget ~= nil and not self.detector:collidesWith(self.currentTarget) then
+      print('invalid')
+      self.nextTarget(self)
+   end
 end
 
 return setmetatable({}, {__call = function(_, ...) return new(...) end})

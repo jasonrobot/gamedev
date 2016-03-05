@@ -29,12 +29,11 @@ local entities = {}
 function state:init()
    entities.mainObject = PlayerController(Object(0, 0, 36, 36))
 
-   print(entities.mainObject.entityVision)
 --   entities.anotherObject = PlayerController(Object(48, 48, 36, 36))
 
 --   entities.static = ShimController(Object(200, 300, 128, 128))
 
-   entities.follower = FollowerController(Object(0, 1000, 24, 24), entities.mainObject)
+--   entities.follower = FollowerController(Object(0, 1000, 24, 24), entities.mainObject)
 
    --   Map.init()
    
