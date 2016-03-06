@@ -24,7 +24,7 @@ local function new (x, y, w, h)
 	      velMax = velMax,
 	      accMax = accMax,}
    t = setmetatable(t, Object)
-   HC.register(t.ps)
+   --HC.register(t.ps)
    Signal.register('draw', function () t:draw() end)
    return t
 end

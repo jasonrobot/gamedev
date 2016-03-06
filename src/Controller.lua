@@ -1,5 +1,6 @@
 ---- Controller.lua
 --- This holds common code used by controllers to interact with objects
+--global HC = require 'HC'
 
 local Controller = {}
 Controller.__index = Controller
