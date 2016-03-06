@@ -1,6 +1,6 @@
 -- main.lua
 -- entry point for the Love2d game engine
-package.path = package.path .. ';lib/?/init.lua;lib/?.lua;lib/hump/?.lua;src/?.lua'
+package.path = package.path .. ';lib/?/init.lua;lib/?.lua;lib/hump/?.lua;src/?.lua;src/controllers/?.lua'
 --local G = love.graphics
 
 --local Camera = require 'camera'

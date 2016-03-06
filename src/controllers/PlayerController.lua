@@ -4,9 +4,12 @@
 -- global Signal = require 'hump.signal'
 local HC = require 'HC'
 local vector_light = require 'hump.vector-light'
+local Timer = require 'timer'
 
 local Controller = require 'Controller'
 local TargetLocator = require 'TargetLocator'
+local BulletController = require 'BulletController'
+local Object = require 'Object'
 
 local PlayerController = setmetatable({}, Controller)
 PlayerController.__index = PlayerController
@@ -43,6 +46,13 @@ function PlayerController:drawAim()
    love.graphics.line(x, y, vector_light.add(x, y, tx, ty))
 end
 
+function PlayerController:shoot()
+   local w, h = self.object:getCenter()
+   local mover = function (object, dt) return object end
+   local shot = BulletController(Object(w, h, 10, 10), mover)
+   table.insert(entities, shot)
+end
+
 function PlayerController:registerCallbacks()
    Signal.register('draw', function() self.drawAim(self) end)
 
@@ -57,6 +67,9 @@ function PlayerController:registerCallbacks()
    Signal.register('right_released', function() self.object.intentions.right = false end)
 
    Signal.register('space', function() self.targetLocator:nextTarget() end)
+
+   Timer.every(1, function() self.shoot(self) end, 1)
+
 end
 
 return setmetatable({}, {__call = function(_,...) return new(...) end})

@@ -6,6 +6,7 @@
 local G = love.graphics
 
 local Camera = require 'camera'
+local Timer = require 'timer'
 -- Signal = require 'signal'
 local HC = require 'HC'
 local STI = require 'STI'
@@ -24,7 +25,7 @@ local map
 
 --- The entities that will be active in this gamestate
 --
-local entities = {}
+entities = {}
 
 --- GameState handlers and overrides
 function state:init()
@@ -58,7 +59,7 @@ function state:update(dt)
 	 if not other.fakeObject then
 	    local collides, dx, dy = v.object.ps:collidesWith(other)
 	    if collides then
-	       v:fixCollision(dx, dy)
+	       --v:fixCollision(dx, dy)
 	    end
 	 end
       end
@@ -67,7 +68,8 @@ function state:update(dt)
    map:update(dt)
 
    cam:lookAt(entities.mainObject:getCenter())
-   
+
+   Timer.update(dt)
 end
 
 function state:draw()

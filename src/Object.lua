@@ -17,12 +17,14 @@ local accMax = 25
 -- @param y
 -- @param image This is a string path to the image. Do not pass a loaded image!
 local function new (x, y, w, h)
-   local t = {ps = HC.rectangle(x, y, w, h),
-	      vel = Vector(0, 0),
-	      acc = Vector(0, 0),
-	      intentions = {},
-	      velMax = velMax,
-	      accMax = accMax,}
+   local t = {}
+   t.ps = HC.rectangle(x, y, w, h)
+   t.vel = Vector(0, 0)
+   t.acc = Vector(0, 0)
+   t.intentions = {}
+   t.velMax = velMax
+   t.accMax = accMax
+   
    t = setmetatable(t, Object)
    --HC.register(t.ps)
    Signal.register('draw', function () t:draw() end)
@@ -38,6 +40,7 @@ function Object:draw ()
 end
 
 function Object:doIntentions()
+   if self.intentions.inanimate then return end
    if self.intentions.up or self.intentions.down then
       if self.intentions.up then
 	 --move up
