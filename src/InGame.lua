@@ -46,7 +46,7 @@ function state:init()
       
    cam = Camera(0, 0)
    for k, v in next, entities do
-      print(k, v.ps or v.object.ps)
+      --print(k, v.ps or v.object.ps)
    end
    
 end
@@ -55,9 +55,11 @@ function state:update(dt)
    for k, v in next, entities do
       v:update(dt)
       for other in pairs(HC.neighbors(v.object.ps)) do
-	 local collides, dx, dy = v.object.ps:collidesWith(other)
-	 if collides then
-	    v:fixCollision(dx, dy)
+	 if not other.fakeObject then
+	    local collides, dx, dy = v.object.ps:collidesWith(other)
+	    if collides then
+	       v:fixCollision(dx, dy)
+	    end
 	 end
       end
    end   
