@@ -1,5 +1,5 @@
----- FollowerController.lua
---- This controls an Actor object that just follows the player
+--- FollowerController.lua
+-- This controls an Actor object that just follows the player
 
 local Controller = require 'Controller'
 
@@ -8,14 +8,20 @@ FollowerController.__index = FollowerController
 
 local followDistance = 100
 
+--- Constructor
+-- Honestly this is pretty useless, since its mostly just for purposes of demonstration/testing
+-- @param newObject the object for this entity
+-- @param whoToFollow an object for this entity to chase after
+-- @return constructed object
 local function new(newObject, whoToFollow)
-   local t = setmetatable({object = newObject,
-			   target = whoToFollow
-			  },FollowerController)
-   Signal.register('update', function (dt) t:update(dt) end)
-   return t
+   local t = {}
+   t.object = newObject
+   t.target = whoToFollow
+   return setmetatable(t, FollowerController)
 end
 
+--- Moves towards the self.target object
+-- @param dt
 function FollowerController:update(dt)
    --if the distance from self.object to target.object < followDistance
    local x, y = self.object:getCenter()
@@ -55,10 +61,6 @@ function FollowerController:update(dt)
    end
    
    self.object:update(dt)
-end
-
-function FollowerController:getCenter()
-   return self.object:getCenter()
 end
 
 return setmetatable({}, {__call = function (_, ...) return new(...) end})

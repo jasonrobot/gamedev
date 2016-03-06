@@ -16,16 +16,17 @@ local FollowerController = require 'FollowerController'
 local ShimController = require 'ShimController'
 --local Gamestate = require 'gamestate'
 
---local table
+--- There is no module, the gamestate is a singleton
 local state = {}
 
-local Map = require 'Map'
 local cam
 local map
 
+--- The entities that will be active in this gamestate
+--
 local entities = {}
 
---- GameState handlers and overrides ---
+--- GameState handlers and overrides
 function state:init()
    entities.mainObject = PlayerController(Object(0, 0, 36, 36))
 
@@ -85,4 +86,4 @@ function state:keyreleased(key, code)
    Signal.emit(key .. '_released')
 end
 
-return state;
+return state

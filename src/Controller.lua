@@ -1,5 +1,6 @@
----- Controller.lua
---- This holds common code used by controllers to interact with objects
+--- Controller.lua
+-- This holds common code used by controllers to interact with objects
+-- these functions should be common to all entities. If you need anything beyond these basics, override these functions.
 
 local Controller = {}
 Controller.__index = Controller
