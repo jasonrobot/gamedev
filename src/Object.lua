@@ -1,21 +1,25 @@
----- Object.lua
---- This object represents either a player, npc, or object that can be involved in the script
+--- Object.lua
+-- This object represents either a player, npc, or object that can be involved
+-- in the script
+--
+--@module Object
 
 local HC = require 'HC'
 local Vector = require 'vector'
-local G = love.graphics
 
 local Object = {}
--- The deal with this is that we are both the metatable and the lookup resource for the new tables we construct
+-- The deal with this is that we are both the metatable and the lookup resource
+-- for the new tables we construct
 Object.__index = Object
 
 local velMax = 250
 local accMax = 25
 
 --- Constructor
--- @param x
--- @param y
--- @param image This is a string path to the image. Do not pass a loaded image!
+-- @param x center x
+-- @param y center y
+-- @param w width
+-- @param h height
 local function new (x, y, w, h)
    local t = {ps = HC.rectangle(x, y, w, h),
 	      vel = Vector(0, 0),
@@ -29,6 +33,9 @@ local function new (x, y, w, h)
    return t
 end
 
+--- Returns the center of the object as x, y
+-- @return x
+-- @return y
 function Object:getCenter()
    return self.ps:center()
 end
@@ -37,6 +44,9 @@ function Object:draw ()
    self.ps:draw('fill')
 end
 
+--- doIntentions
+-- this function takes requests from wrapping controllers and
+-- moved the object code accordingly
 function Object:doIntentions()
    if self.intentions.up or self.intentions.down then
       if self.intentions.up then
@@ -81,6 +91,11 @@ function Object:doIntentions()
    end   
 end
 
+--- fixCollision
+-- this function actually just counteracts the intentions being applied to the
+-- object to keep it from going into another object.
+-- @param dx the x of the seperating vector from HC
+-- @param dy the y of the seperating vector from HC
 function Object:fixCollision(dx, dy)
    if self.intentions.up or self.intentions.down or
    self.intentions.left or self.intentions.right then
@@ -88,10 +103,14 @@ function Object:fixCollision(dx, dy)
       if dy ~= 0 then self.vel.y = 0 end
       
       self.ps:move(dx, dy)
-      
    end
 end
 
+--- update
+-- runs the physics movement for the object. applies acceleration to velocity
+-- and velocity to displacement. Keeps these values below the maximum allowable
+-- for the object
+-- @param dt delta time
 function Object:update(dt)
    self:doIntentions()
    self.vel = self.vel + self.acc
@@ -103,5 +122,5 @@ function Object:update(dt)
    self.ps:move((self.vel * dt):unpack())
 end
 
--- this in effect returns a class that can be called to create actors
+--return the module
 return setmetatable({},{__call = function(_, ...) return new(...) end})
