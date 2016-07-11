@@ -6,8 +6,7 @@
 local G = love.graphics
 
 local Camera = require "camera"
--- Signal = require "signal"
-local HC = require "HC"
+
 
 local Actor = require "Actor"
 local PlayerController = require "PlayerKeymap"
